@@ -50,28 +50,34 @@ const Upload = () => {
         // A full list of error codes is available at
         // https://firebase.google.com/docs/storage/web/handle-errors
         switch (error.code) {
-          case 'storage/unauthorized':
+          case "storage/unauthorized":
             // User doesn't have permission to access the object
             break;
-          case 'storage/canceled':
+          case "storage/canceled":
             // User canceled the upload
             break;
-    
+
           // ...
-    
-          case 'storage/unknown':
+
+          case "storage/unknown":
             // Unknown error occurred, inspect error.serverResponse
             break;
         }
-      }, 
+      },
       () => {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL);
+          console.log("File available at", downloadURL);
+
+          setInputs((prev) => {
+            return {
+              ...prev,
+              [fileType]: downloadURL,
+            };
+          });
         });
       }
     );
-    
   };
 
   const handleSubmit = async (e) => {
