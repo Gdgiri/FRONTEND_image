@@ -12,17 +12,10 @@ import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
   const [img, setImg] = useState(undefined);
-  const [video, setVideo] = useState(undefined);
   const [imgPerc, setImgPerc] = useState(0);
-  const [videoPerc, setVideoPerc] = useState(0);
   const [inputs, setInputs] = useState({});
   const [error, setError] = useState(""); // For capturing error messages
   const navigate = useNavigate();
-  useEffect(() => {
-    if (video) {
-      uploadFile(video, "videoUrl");
-    }
-  }, [video]);
 
   useEffect(() => {
     if (img) {
@@ -32,7 +25,7 @@ const Upload = () => {
 
   const uploadFile = (file, fileType) => {
     const storage = getStorage(app);
-    const folder = fileType === "imgUrl" ? "images/" : "videos/";
+    const folder = fileType === "imgUrl";
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, folder + fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -44,8 +37,6 @@ const Upload = () => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         if (fileType === "imgUrl") {
           setImgPerc(Math.round(progress));
-        } else {
-          setVideoPerc(Math.round(progress));
         }
       },
       (error) => {
@@ -109,31 +100,6 @@ const Upload = () => {
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="video">Video:</label>
-                  {videoPerc > 0 && (
-                    <div className="progress mb-2">
-                      <div
-                        className="progress-bar"
-                        role="progressbar"
-                        style={{ width: `${videoPerc}%` }}
-                        aria-valuenow={videoPerc}
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      >
-                        {videoPerc}%
-                      </div>
-                    </div>
-                  )}
-                  <input
-                    type="file"
-                    className="form-control-file"
-                    name="video"
-                    id="video"
-                    accept="video/*"
-                    onChange={(e) => setVideo(e.target.files[0])}
-                  />
-                </div>
                 <div className="form-group">
                   <label htmlFor="img">Image:</label>
                   {imgPerc > 0 && (

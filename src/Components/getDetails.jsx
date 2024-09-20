@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cards from "./Cards";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const GetDetails = () => {
   const [data, setData] = useState([]); // Ensure `data` is an array
@@ -27,11 +28,15 @@ const GetDetails = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <>
-          {data.map((ele) => (
-            <Cards key={ele._id} ele={ele} /> // Return the `Cards` component
-          ))}
-        </>
+        <div className="container mt-4">
+          <div className="row row-cols-1 row-cols-md-3 g-4">
+            {data.map((ele) => (
+              <div className="col-md-6 mb-4" key={ele._id}>
+                <Cards ele={ele} />
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
