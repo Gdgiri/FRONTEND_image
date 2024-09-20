@@ -15,6 +15,7 @@ const Upload = () => {
   const [imgPerc, setImgPerc] = useState(0);
   const [videoPerc, setVideoPerc] = useState(0);
   const [inputs, setInputs] = useState({});
+  const [error, setError] = useState(""); // For capturing error messages
 
   useEffect(() => {
     if (video) {
@@ -84,10 +85,16 @@ const Upload = () => {
     e.preventDefault();
     try {
       console.log("Sending data:", inputs); // Log data
-      await axios.post("http://localhost:5000/api/video", inputs);
-      window.location.reload();
+      const res=await axios.post("http://localhost:5000/api/video", inputs);
+      if (res.status === 200 || res.status === 201) {
+        console.log("url added", res.data);
+      } else {
+        setError("Failed to add url. Please try again.");
+      }
+      // window.location.reload();
     } catch (error) {
       console.error(error);
+      
     }
   };
 
@@ -159,6 +166,7 @@ const Upload = () => {
           </div>
         </div>
       </div>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
