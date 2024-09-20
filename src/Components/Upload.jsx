@@ -8,6 +8,7 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
   const [img, setImg] = useState(undefined);
@@ -16,7 +17,7 @@ const Upload = () => {
   const [videoPerc, setVideoPerc] = useState(0);
   const [inputs, setInputs] = useState({});
   const [error, setError] = useState(""); // For capturing error messages
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (video) {
       uploadFile(video, "videoUrl");
@@ -85,8 +86,9 @@ const Upload = () => {
     e.preventDefault();
     try {
       console.log("Sending data:", inputs); // Log data
-      const res=await axios.post("http://localhost:5000/api/video", inputs);
+      const res = await axios.post("http://localhost:5000/api", inputs);
       if (res.status === 200 || res.status === 201) {
+        navigate("/data");
         console.log("url added", res.data);
       } else {
         setError("Failed to add url. Please try again.");
@@ -94,7 +96,6 @@ const Upload = () => {
       // window.location.reload();
     } catch (error) {
       console.error(error);
-      
     }
   };
 
